@@ -1,0 +1,73 @@
+---
+title: "Getting Started"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Testing some code requires setting up an example RStudio Project and/or R package project. This can be tricky to do while also adhering to good testing principals that tests should be:
+
+- Self contained
+- Self sufficient
+- Allow for an interactive workflow
+- Allow for automated testing
+
+To ease this tension between needing to modify "global" environments, like setting up a project or directory, while also adhering to good testing practices, this package has some helper functions to construct temporary objects that will be removed upon exiting the environment of the unit test.
+
+# Example: creating a RStudio project
+
+Let's say you want to test a function that creates, modifies, or otherwise relies on the existence of an RStudio project. For this example we have a dummy function that simple returns the root directory of the RStudio project in the working directory
+
+```{r, include=FALSE}
+library(testr)
+library(testthat)
+```
+
+
+```{r}
+dummy_function <- function(){
+  rprojroot::find_root(rprojroot::criteria$is_rstudio_project)
+}
+```
+
+### Establishing tempoary RStudio project
+To properly test this, we need a RStudio project inside the test environment, but we don't want that project hanging around after the test and potientially polluting other tests or the dev environment.
+
+To achieve this we use the `create_local_project()` function. This creates an RStudio project in a tempoary folder that is destroyed as soon as the `test_that()` environment is exited.
+
+First let's see what our current working dir is:
+```{r}
+old <- getwd()
+old
+```
+
+Now let's see that the working directory inside the `test_that()` is in the `tmp` folder
+```{r}
+testthat::test_that("check creat_local_project",{
+  testr::create_local_project()
+  cat("This is the working directory inside the unittest: ", getwd(),"\n")
+  testthat::expect_equal(1,1)
+})
+
+```
+Finally, we verify that upon exiting the test, our working directory is back to where we started
+
+```{r}
+getwd()==old
+```
+
+
+### Testing our function
+Now that we have a self-contained way to make a ephemeral RStudio project, we can test our dummy function
+
+```{r}
+test_that("dummy function returns root path in the `tmp` dir",{
+  create_local_project(rstudio = TRUE)
+  x <- dummy_function()
+  expect_true(grepl("/tmp/", x))
+})
+```
+
+

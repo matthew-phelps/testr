@@ -1,0 +1,17 @@
+navbar:
+  type: inverse
+  right:
+    - icon: "fab fa-r-project fa-lg"
+      text: "at Biostat"
+      href: http://r-doc
+
+home:
+  links:
+  - text: RSPM production
+    href: https://rspm.bifrost-prd.corp.aws.novonordisk.com/client/#/repos/2/packages/testr
+
+  - text: Source code
+    href: https://dev.azure.com/novonordiskit/BOS/_git/testr
+
+development:
+  mode: auto

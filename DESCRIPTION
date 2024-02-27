@@ -1,0 +1,26 @@
+Package: testr
+Title: Helpers to make using {testhat} easier for testing project set-ups
+Version: 0.1.13
+Authors@R: 
+    c(person(given = "MEWP (Matthew Phelps)",
+             role = c("aut", "cre"),
+             email = "mewp@novonordisk.com"),
+        person(given = "Novo Nordisk A/S",
+             role = "cph"))
+Description: This project adds several helper functions built ontop of testthat, mostly taken from un-exported functions in {usethis}, that make it easy to set up temporary RStudio projects or R packages for use during unit testing. This can be heplful when you need to test things that depend on having a project file.
+License: Novo Nordisk (C)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Suggests: 
+    covr,
+    knitr,
+    pkgdown,
+    rmarkdown,
+    testthat,
+    rprojroot
+Imports:
+    usethis,
+    withr,
+    fs
+VignetteBuilder: knitr
